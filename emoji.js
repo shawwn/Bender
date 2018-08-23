@@ -5,7 +5,8 @@ const commands = {};
 
 
 commands.steal = async function(inviteStr, emojiNames){
-  emojiNames = emojiNames.toLowerCase().split(",");
+  if (emojiNames)
+  	emojiNames = emojiNames.toLowerCase().split(",");
 
   const inviteCode = inviteStr.match(/([^\/]+)(?:\/+)?$/i)[1];
 
