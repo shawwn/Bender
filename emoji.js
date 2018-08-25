@@ -13,7 +13,7 @@ commands.steal = async function(inviteStr, emojiNames){
   const invite = await acceptInvite(inviteCode);
 
   if (!this.client.guilds.exists('id', invite.guild.id)){
-    await this.client.syncGuilds([invite.guild, this.message.guild]);
+    await this.client.syncGuilds();//[invite.guild, this.message.guild]);
   }
 
   const guild = this.client.guilds.get(invite.guild.id);
@@ -28,14 +28,21 @@ commands.steal = async function(inviteStr, emojiNames){
     e => !this.message.guild.emojis.exists('name', e.name)
   );
 
-	const emojis = await Promise.all(nonDuplicateEmojis.map(
-      e => this.message.guild.createEmoji(e.url, e.name)
+  const creation = (await Promise.all(nonDuplicateEmojis.map(
+      e => this.message.guild.createEmoji(e.url, e.name).catch(error => null)
     )
-  );
+  ));
+
+  const emojis = creation.filter(e => !!e);
 
   const allEmojis = emojis.map(e => 
     `${e}`
   ).join("");
+
+  if (creation.length != emojis.length){
+    const limited = creation.length - emojis.length;
+    await this.message.channel.send(`Adding ${limited} emojis failed due to 50 emoji limits`);
+  }
 
   if (targetEmojis.length != nonDuplicateEmojis.length){
     const dupes = targetEmojis.length - nonDuplicateEmojis.length;
@@ -45,7 +52,7 @@ commands.steal = async function(inviteStr, emojiNames){
   if (emojis.length)
     await this.message.channel.send(`\n${allEmojis}\nSuccess! Hijacked ${emojis.length} emojis from ${guild}.`);
   else
-    await this.message.channel.send(`Failure, no emojis were found!`);
+    await this.message.channel.send(`Failure, no emojis were added!`);
 };
 
 

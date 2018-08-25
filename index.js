@@ -15,7 +15,7 @@ const modules = {};
 )
 
 client.on("message", async message => {
-  if (message.author.bot || message.author.id == client.user.id) return;
+  if (message.author.bot /*|| message.author.id == client.user.id*/) return;
   if (!/^!/.test(message.content)) return;
   
   const args = message.content.slice(1).trim().split(/\s+/g);
