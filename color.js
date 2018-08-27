@@ -5,7 +5,6 @@ const commands = {};
 
 commands[""] = async function(colorStr){
 
-  console.log(this.message.guild.roles);
   const col = color(colorStr).rgbNumber();
 
   const colorRoles = this.message.guild.roles.filter(
