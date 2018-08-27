@@ -1,10 +1,11 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const config = require("./config.json");
+const split = require('split-string');
 
 
 const modules = {};
-["event", "emoji"].forEach(
+["event", "emoji", "color"].forEach(
   v => modules[v] = require(`./${v}.js`)
 );
 
@@ -18,7 +19,10 @@ client.on("message", async message => {
   if (message.author.bot /*|| message.author.id == client.user.id*/) return;
   if (!/^!/.test(message.content)) return;
   
-  const args = message.content.slice(1).trim().split(/\s+/g);
+  const keep = (value, state) => {
+    return value !== '\\' && (value !== '"' || state.prev() === '\\');
+  };
+  const args = split(message.content.slice(1).trim(), {separator: ' ', quotes: ['"'], keep: keep})//.split(/\s+/g);
   const command = args.shift().toLowerCase().split(".");
   const handler = modules[command[0]];
 

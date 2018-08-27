@@ -9,8 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "color": "^3.0.0",
     "discord.js": "^11.4.2",
     "request": "^2.88.0",
-    "request-promise-native": "^1.0.5"
+    "request-promise-native": "^1.0.5",
+    "split-string": "^6.0.0"
   }
 }

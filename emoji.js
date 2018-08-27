@@ -13,7 +13,7 @@ commands.steal = async function(inviteStr, emojiNames){
   const invite = await acceptInvite(inviteCode);
 
   if (!this.client.guilds.exists('id', invite.guild.id)){
-    await this.client.syncGuilds();//[invite.guild, this.message.guild]);
+    await this.client.syncGuilds([invite.guild, this.message.guild]);
   }
 
   const guild = this.client.guilds.get(invite.guild.id);
