@@ -13,7 +13,11 @@ commands[""] = async function(colorStr){
 
   const curColorRole = this.message.member.roles.find(
     e => !e.deleted && /^\$Color_/i.test(e.name)
-  ) || {};
+  );
+
+  if (curColorRole && curColorRole.color == col){
+    return;
+  }
 
   const targetColorRole = colorRoles.find(
     e => e.color == col
@@ -24,11 +28,12 @@ commands[""] = async function(colorStr){
   });
 
   targetColorRole.setPosition(this.message.guild.roles.size - 1);
-
-  if (targetColorRole.id != curColorRole.id){
-    await this.message.member.addRole(targetColorRole);
-    if (curColorRole && curColorRole.members && curColorRole.members.size <= 1){
+  await this.message.member.addRole(targetColorRole);
+  if (curColorRole){
+    if (curColorRole.members.size <= 1){
       await curColorRole.delete();
+    }else{
+     await this.message.member.removeRole(curColorRole);
     }
   }
 
