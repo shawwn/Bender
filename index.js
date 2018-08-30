@@ -1,19 +1,17 @@
 const Discord = require("discord.js");
-const client = new Discord.Client();
 const config = require("./config.json");
 const split = require('split-string');
+const fs = require("fs");
 
 
-const modules = {};
-["event", "emoji", "color"].forEach(
-  v => modules[v] = require(`./${v}.js`)
-);
+const client = new Discord.Client();
+exports.client = client;
+exports.config = config;
 
-["ready", "guildCreate", "guildDelete"].forEach(
-  v => client.on(v, () => {
-  	//todo
-  })
-)
+const dir = "./modules";
+const modules = new Map(fs.readdirSync(dir).map(v => 
+  [v.match(/[^.]+/)[0], require(`${dir}/${v}`)]
+));
 
 client.on("message", async message => {
   if (message.author.bot /*|| message.author.id == client.user.id*/) return;
@@ -24,12 +22,17 @@ client.on("message", async message => {
   };
   const args = split(message.content.slice(1).trim(), {separator: ' ', quotes: ['"'], keep: keep})//.split(/\s+/g);
   const command = args.shift().toLowerCase().split(".");
-  const handler = modules[command[0]];
+  const handler = modules.get(command[0]);
 
   if (!handler) return;
 
-  await handler[command[1] || ""].apply({client: client, message: message}, args);
+  const func = handler[command[1] || ""];
+
+  if (!func) return;
+
+  await func.apply(message, args);
 });
 
 client.login(config.token);
 
+console.log("Bender is running....");
