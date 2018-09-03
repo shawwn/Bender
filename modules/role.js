@@ -101,3 +101,50 @@ async function(roleName){
 
   
 };
+
+
+exports.prune =
+exports.clean = 
+exports.tidy = 
+async function(){
+  const roles = this.guild.roles.filter(
+    e => !e.deleted && !e.members.size
+  );
+
+  if (!roles.size){
+    await this.channel.send(`*Nothing to do! No unused roles found.*`);
+    return;
+  }
+
+  const rolesStr = roles.map(
+    e => e.name
+  ).join(", ");
+
+  await this.channel.send(`*${roles.size} unused roles found: ${rolesStr}*`);
+
+  const msg = await this.channel.send(`*Deleting unused roles, please wait...*`);
+  await Promise.all(roles.map(
+     e => e.delete()
+  ));
+
+  await msg.edit(`*Success! ${roles.size} unused roles have been deleted.*`);
+
+};
+
+
+exports[""] =
+exports.list =
+async function(){
+  const role = this.mentions.roles.first();
+  const member = this.mentions.members.first();
+
+  if (role){
+    const members = role.members.map(e => e.user.username).join(", ");
+    await this.channel.send(`*${role} has ${role.members.size} members: ${members}*`);
+  }else if (member){
+    const roles = member.roles.filter(
+      e => e.position
+    ).map(e => e.name).join(", ");
+    await this.channel.send(`*${member} has ${member.roles.size} roles: ${roles}*`);
+  }
+};

@@ -9,7 +9,7 @@ exports.client = client;
 exports.config = config;
 
 const dir = "./modules";
-const modules = new Map(fs.readdirSync(dir).map(v => 
+const modules = new Map(fs.readdirSync(dir).filter(v => /\.js$/.test(v)).map(v => 
   [v.match(/[^.]+/)[0], require(`${dir}/${v}`)]
 ));
 
@@ -20,8 +20,9 @@ client.on("message", async message => {
   const keep = (value, state) => {
     return value !== '\\' && (value !== '"' || state.prev() === '\\');
   };
-  const args = split(message.content.slice(1).trim(), {separator: ' ', quotes: ['"'], keep: keep})//.split(/\s+/g);
-  const command = args.shift().toLowerCase().split(".");
+
+  const cmdMatches = message.content.match(/^!(\S+)([^]*)/);
+  const command = cmdMatches[1].toLowerCase().split(".");
   const handler = modules.get(command[0]);
 
   if (!handler) return;
@@ -30,7 +31,12 @@ client.on("message", async message => {
 
   if (!func) return;
 
-  await func.apply(message, args);
+  if (func.RAW){
+    await func.call(message, cmdMatches[2].trim());
+  }else{
+    const args = split(message.content.slice(1).trim(), {separator: ' ', quotes: ['"'], keep: keep})//.split(/\s+/g);
+    await func.apply(message, args);
+  }
 });
 
 client.login(config.token);
