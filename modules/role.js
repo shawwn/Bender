@@ -14,9 +14,8 @@ async function(roleName, colorStr){
   const positionThreshold = this.guild.roles.get(config.lowestUnmodifyableRole).position;
 
   
-
   var targetRole = this.mentions.roles.first() || this.guild.roles.find(
-    e => !e.deleted && e.name == roleName
+    e => !e.deleted && e.name.toLowerCase() == roleName.toLowerCase()
   );
 
   var col;
@@ -78,7 +77,7 @@ async function(roleName){
 
 
   var targetRole = this.mentions.roles.first() || this.guild.roles.find(
-    e => !e.deleted && e.name == roleName
+    e => !e.deleted && e.name.toLowerCase() == roleName.toLowerCase()
   );
 
   if (!targetRole){
@@ -145,6 +144,6 @@ async function(){
     const roles = member.roles.filter(
       e => e.position
     ).map(e => e.name).join(", ");
-    await this.channel.send(`*${member} has ${member.roles.size} roles: ${roles}*`);
+    await this.channel.send(`*${member} has ${member.roles.size - 1} roles: ${roles}*`);
   }
 };

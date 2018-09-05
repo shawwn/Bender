@@ -7,6 +7,8 @@ const Discord = require("discord.js");
 const latexCode = v => (
 `\\documentclass[border=1pt]{standalone}
 \\usepackage{amsmath}
+\\usepackage{amsfonts}
+\\usepackage{mathtools}
 \\usepackage{color}
 \\begin{document}
 ${v}

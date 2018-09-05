@@ -31,10 +31,12 @@ client.on("message", async message => {
 
   if (!func) return;
 
+  const argStr = cmdMatches[2].trim();
+
   if (func.RAW){
-    await func.call(message, cmdMatches[2].trim());
+    await func.call(message, argStr);
   }else{
-    const args = split(message.content.slice(1).trim(), {separator: ' ', quotes: ['"'], keep: keep})//.split(/\s+/g);
+    const args = split(argStr, {separator: ' ', quotes: ['"'], keep: keep})//.split(/\s+/g);
     await func.apply(message, args);
   }
 });
