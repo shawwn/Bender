@@ -2,8 +2,9 @@ const color = require('color');
 
 const COLOR_ROLE_NAME = "🎨";
 
-exports[""] = async function(colorStr){
+exports[""] = changeColor;
 
+async function changeColor(colorStr){
   const mentionedRole = this.mentions.roles.first();
 
   var col;
@@ -49,4 +50,6 @@ exports[""] = async function(colorStr){
   }
 
   await this.channel.send(`*${this.member} Your color is now set to ${targetColorRole}*`);
-};
+}
+
+changeColor.RAW = true;

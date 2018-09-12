@@ -70,8 +70,9 @@ exports.rm =
 exports.rem = 
 exports.remove = 
 exports.del = 
-exports.delete =
-async function(roleName){
+exports.delete = rm;
+
+async function rm (roleName){
 
   const positionThreshold = this.guild.roles.get(config.lowestUnmodifyableRole).position;
 
@@ -100,6 +101,8 @@ async function(roleName){
 
   
 };
+
+rm.RAW = true;
 
 
 exports.prune =

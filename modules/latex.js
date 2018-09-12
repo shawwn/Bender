@@ -16,6 +16,7 @@ ${v}
 );
 
 const latex = async function(code){
+  //console.log(code);
   const tmpdir = os.tmpdir();
   const fileStem = tmpdir + "\\" + Math.random().toString(36);
   const texFile = fileStem + ".tex";
@@ -25,7 +26,7 @@ const latex = async function(code){
       shell: true,
       cwd: tmpdir
     });
-    await execFile('gswin64c -dGraphicsAlphaBits=4 -dTextAlphaBits=4 -r300 -sDEVICE=png16m', [`-o ${fileStem}.png`, `${fileStem}.pdf`], {
+    await execFile('gswin64c -dGraphicsAlphaBits=4 -dTextAlphaBits=4 -r300 -sDEVICE=pngalpha', [`-o ${fileStem}.png`, `${fileStem}.pdf`], {
       shell: true,
       cwd: tmpdir
     });
