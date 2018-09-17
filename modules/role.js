@@ -136,12 +136,14 @@ async function(){
 
 exports[""] = exports.list = list;
 
-async function list(){
+async function list(name){
   const role = this.mentions.roles.first() || this.guild.roles.find(
-    e => !e.deleted && e.name.toLowerCase() == roleName.toLowerCase()
+    e => !e.deleted && e.name.toLowerCase() == name.toLowerCase()
   );
 
-  const member = this.mentions.members.first();
+  const member = this.mentions.members.first() || this.guild.members.find(
+    e => !e.deleted && e.name.toLowerCase() == name.toLowerCase()
+  );;
 
   if (role){
     const members = role.members.map(e => e.user.username).join(", ");
