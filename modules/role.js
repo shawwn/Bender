@@ -134,10 +134,13 @@ async function(){
 };
 
 
-exports[""] =
-exports.list =
-async function(){
-  const role = this.mentions.roles.first();
+exports[""] = exports.list = list;
+
+async function list(){
+  const role = this.mentions.roles.first() || this.guild.roles.find(
+    e => !e.deleted && e.name.toLowerCase() == roleName.toLowerCase()
+  );
+
   const member = this.mentions.members.first();
 
   if (role){
@@ -150,3 +153,5 @@ async function(){
     await this.channel.send(`*${member} has ${member.roles.size - 1} roles: ${roles}*`);
   }
 };
+
+list.RAW = true;
