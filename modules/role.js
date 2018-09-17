@@ -142,7 +142,7 @@ async function list(name){
   );
 
   const member = this.mentions.members.first() || this.guild.members.find(
-    e => !e.deleted && e.name.toLowerCase() == name.toLowerCase()
+    e => !e.deleted && e.displayName.toLowerCase() == name.toLowerCase()
   );;
 
   if (role){
