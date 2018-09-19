@@ -141,19 +141,22 @@ async function list(name){
     e => !e.deleted && e.name.toLowerCase() == name.toLowerCase()
   );
 
-  const member = this.mentions.members.first() || this.guild.members.find(
-    e => !e.deleted && e.displayName.toLowerCase() == name.toLowerCase()
-  );;
-
   if (role){
-    const members = role.members.map(e => e.user.username).join(", ");
-    await this.channel.send(`*${role} has ${role.members.size} members: ${members}*`);
-  }else if (member){
-    const roles = member.roles.filter(
-      e => e.position
-    ).map(e => e.name).join(", ");
-    await this.channel.send(`*${member} has ${member.roles.size - 1} roles: ${roles}*`);
+    const members = role.members.map(e => e.displayName).join(", ");
+    await this.channel.send(`*${role.name} has ${role.members.size} members: ${members}*`);
+    return;
   }
+  const member = this.mentions.members.first() || this.guild.members.find(
+    e => !e.deleted && e.user.username.toLowerCase() == name.toLowerCase() || e.displayName.toLowerCase() == name.toLowerCase()
+  );
+  if (!member){
+    await this.channel.send(`*${this.member} Error! Please supply a valid member or role.*`);
+    return;
+  }
+  const roles = member.roles.filter(
+    e => e.position
+  ).map(e => e.name).join(", ");
+  await this.channel.send(`*${member.displayName} has ${member.roles.size - 1} roles: ${roles}*`);
 };
 
 list.RAW = true;
