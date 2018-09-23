@@ -5,7 +5,9 @@ const COLOR_ROLE_NAME = "🎨";
 exports[""] = changeColor;
 
 async function changeColor(colorStr){
-  const mentionedRole = this.mentions.roles.first();
+  const mentionedRole = this.mentions.roles.first() || this.guild.roles.find(
+    e => !e.deleted && e.name.toLowerCase() == colorStr.toLowerCase()
+  );
 
   var col;
 
