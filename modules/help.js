@@ -2,17 +2,19 @@ const request = require('request-promise-native');
 
 async function help(s) {
   await this.channel.send(`
-    commands:
+  commands:
 
+    !g.img <foo> -- google image search for foo
+    !yt <foo> -- youtube results for foo
+    !wiki <foo> -- wikipedia results for foo
+
+  more commands:
     chess
     color
-    g
     latex
     pfp
     role
     timer
-    wiki
-    yt
   `);
 }
 
