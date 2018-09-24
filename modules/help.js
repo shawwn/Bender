@@ -8,6 +8,7 @@ async function help(s) {
     !g.img <foo> -- google image search for foo
     !yt <foo> -- youtube results for foo
     !wiki <foo> -- wikipedia results for foo
+    !all -- all
 
   more commands:
     color
